@@ -269,11 +269,11 @@ async function doLogin(){
   document.getElementById('loginError').textContent='';
   const {error}=await sb.auth.signInWithPassword({email,password});
   if(error){document.getElementById('loginError').textContent='Errore: '+error.message+' | '+error.status;alert('LOGIN ERROR: '+JSON.stringify(error));return;}
-  document.getElementById('loginScreen').remove();
+  document.getElementById('loginScreen').setAttribute('style','display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;z-index:-9999!important;');
   init();
 }
 async function doLogout(){await sb.auth.signOut();document.getElementById('loginScreen').style.display='flex';}
-async function checkSession(){const {data}=await sb.auth.getSession();if(data.session){document.getElementById('loginScreen').remove();try{await init();}catch(e){document.getElementById('loginError').textContent='Errore: '+e.message;}}}
+async function checkSession(){const {data}=await sb.auth.getSession();if(data.session){document.getElementById('loginScreen').setAttribute('style','display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;z-index:-9999!important;');try{await init();}catch(e){document.getElementById('loginError').textContent='Errore: '+e.message;}}}
 async function init(){await loadAppointments();renderDashboard();renderAppointments();renderClients();renderCalendar();}
 async function loadAppointments(){const {data,error}=await sb.from('appuntamenti').select('*').order('data',{ascending:true});if(!error)appointments=data||[];}
 function setSection(sec){
