@@ -268,7 +268,7 @@ async function doLogin(){
   const password=document.getElementById('loginPassword').value;
   document.getElementById('loginError').textContent='';
   const {error}=await sb.auth.signInWithPassword({email,password});
-  if(error){document.getElementById('loginError').textContent='Credenziali non valide: '+error.message;return;}
+  if(error){document.getElementById('loginError').textContent='Errore: '+error.message+' | '+error.status;alert('LOGIN ERROR: '+JSON.stringify(error));return;}
   document.getElementById('loginScreen').remove();
   init();
 }
