@@ -11,7 +11,7 @@
 .dark{--bg:#0f172a;--surface:#1e293b;--text:#f1f5f9;--text-muted:#94a3b8;--border:#334155;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden;}
-#loginScreen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000;}
+#loginScreen{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;z-index:1000;}
 .login-card{background:var(--surface);border-radius:16px;padding:40px;border:1px solid var(--border);width:100%;max-width:380px;box-shadow:0 4px 24px rgba(0,0,0,0.08);}
 .login-card h2{font-size:1.4rem;margin-bottom:8px;color:var(--primary);}
 .login-card p{color:var(--text-muted);font-size:0.85rem;margin-bottom:24px;}
@@ -273,7 +273,7 @@ async function doLogin(){
   init();
 }
 async function doLogout(){await sb.auth.signOut();document.getElementById('loginScreen').style.display='flex';}
-async function checkSession(){const {data}=await sb.auth.getSession();if(data.session){document.getElementById('loginScreen').setAttribute('style','display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;z-index:-9999!important;');try{await init();}catch(e){document.getElementById('loginError').textContent='Errore: '+e.message;}}}
+async function checkSession(){const {data}=await sb.auth.getSession();const ls=document.getElementById('loginScreen');if(!data.session){ls.style.display='flex';return;}if(data.session){document.getElementById('loginScreen').setAttribute('style','display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;z-index:-9999!important;');try{await init();}catch(e){document.getElementById('loginError').textContent='Errore: '+e.message;}}}
 async function init(){await loadAppointments();renderDashboard();renderAppointments();renderClients();renderCalendar();}
 async function loadAppointments(){const {data,error}=await sb.from('appuntamenti').select('*').order('data',{ascending:true});if(!error)appointments=data||[];}
 function setSection(sec){
