@@ -269,11 +269,11 @@ async function doLogin(){
   document.getElementById('loginError').textContent='';
   const {error}=await sb.auth.signInWithPassword({email,password});
   if(error){document.getElementById('loginError').textContent='Credenziali non valide: '+error.message;return;}
-  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('loginScreen').remove();
   init();
 }
 async function doLogout(){await sb.auth.signOut();document.getElementById('loginScreen').style.display='flex';}
-async function checkSession(){const {data}=await sb.auth.getSession();if(data.session){document.getElementById('loginScreen').style.display='none';try{await init();}catch(e){document.getElementById('loginError').textContent='Errore: '+e.message;}}}
+async function checkSession(){const {data}=await sb.auth.getSession();if(data.session){document.getElementById('loginScreen').remove();try{await init();}catch(e){document.getElementById('loginError').textContent='Errore: '+e.message;}}}
 async function init(){await loadAppointments();renderDashboard();renderAppointments();renderClients();renderCalendar();}
 async function loadAppointments(){const {data,error}=await sb.from('appuntamenti').select('*').order('data',{ascending:true});if(!error)appointments=data||[];}
 function setSection(sec){
