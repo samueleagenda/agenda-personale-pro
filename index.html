@@ -273,7 +273,7 @@ async function doLogin(){
   init();
 }
 async function doLogout(){await sb.auth.signOut();document.getElementById('loginScreen').style.display='flex';}
-async function checkSession(){const {data}=await sb.auth.getSession();const ls=document.getElementById('loginScreen');if(!data.session){ls.style.display='flex';return;}if(data.session){document.getElementById('loginScreen').setAttribute('style','display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;z-index:-9999!important;');try{await init();}catch(e){document.getElementById('loginError').textContent='Errore: '+e.message;}}}
+async function checkSession(){const t=new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),5000));let data={session:null};try{const res=await Promise.race([sb.auth.getSession(),t]);data=res.data||{session:null};}catch(e2){};const ls=document.getElementById('loginScreen');if(!data.session){ls.style.display='flex';return;}if(data.session){document.getElementById('loginScreen').setAttribute('style','display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;z-index:-9999!important;');try{await init();}catch(e){document.getElementById('loginError').textContent='Errore: '+e.message;}}}
 async function init(){await loadAppointments();renderDashboard();renderAppointments();renderClients();renderCalendar();}
 async function loadAppointments(){try{const p=sb.from('appuntamenti').select('*').order('data',{ascending:true});const t=new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),8000));const {data,error}=await Promise.race([p,t]);if(!error)appointments=data||[];}catch(e){appointments=[];}
 function setSection(sec){
